@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>ShoeMeHowIFelt</title>
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --accent: #00B4D8;
+  --accent-dark: #0096B7;
+  --header-bg: #1B2838;
+  --tab-bg: #1B2838;
+  --bg: #F4F6F8;
+  --card-bg: #FFFFFF;
+  --text: #1E293B;
+  --text-secondary: #64748B;
+  --border: #E2E8F0;
+  --danger: #EF4444;
+  --warning-yellow: #F59E0B;
+  --warning-red: #EF4444;
+  --success: #22C55E;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  --radius: 12px;
+  --tab-height: 64px;
+  --header-height: 56px;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* Header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background: var(--header-bg);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  z-index: 100;
+  padding: 0 16px;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+}
+
+.header-action {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.header-action:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* Content area */
+.content {
+  position: fixed;
+  top: var(--header-height);
+  bottom: var(--tab-height);
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px;
+  padding-bottom: 24px;
+}
+
+/* Tab bar */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--tab-height);
+  background: var(--tab-bg);
+  display: flex;
+  align-items: stretch;
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #8899AA;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+  gap: 4px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab-btn .tab-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.tab-btn.active {
+  color: var(--accent);
+}
+
+/* Tab panels */
+.tab-panel {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Buttons */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 14px 20px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+  background: var(--accent-dark);
+}
+
+.btn-secondary {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-secondary:active {
+  background: var(--bg);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-small {
+  padding: 8px 14px;
+  font-size: 13px;
+  border-radius: 8px;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: box-shadow 0.2s;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.card-stats {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.card-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-stat-value {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.card-stat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Forms */
+.form-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  animation: fadeInOverlay 0.2s ease;
+}
+
+.form-overlay.active {
+  display: block;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.form-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border-radius: 20px 20px 0 0;
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0));
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.form-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-sheet-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.form-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+select.form-input {
+  cursor: pointer;
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* Feeling score selector */
+.feeling-selector {
+  display: flex;
+  gap: 4px;
+}
+
+.feeling-btn {
+  flex: 1;
+  aspect-ratio: 1;
+  max-width: 40px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+}
+
+.feeling-btn.selected {
+  color: white;
+  border-color: transparent;
+  transform: scale(1.1);
+}
+
+.feeling-btn[data-value="1"],
+.feeling-btn[data-value="2"] { --feel-color: #EF4444; }
+.feeling-btn[data-value="3"],
+.feeling-btn[data-value="4"] { --feel-color: #F97316; }
+.feeling-btn[data-value="5"],
+.feeling-btn[data-value="6"] { --feel-color: #F59E0B; }
+.feeling-btn[data-value="7"],
+.feeling-btn[data-value="8"] { --feel-color: #22C55E; }
+.feeling-btn[data-value="9"],
+.feeling-btn[data-value="10"] { --feel-color: #10B981; }
+
+.feeling-btn.selected {
+  background: var(--feel-color);
+  border-color: var(--feel-color);
+}
+
+/* Feeling badge */
+.feeling-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Run card */
+.run-card {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.run-card-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.run-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.run-card-date {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.run-card-meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.run-card-details {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.run-card.expanded .run-card-details {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+.run-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 14px;
+}
+
+.run-detail-label {
+  color: var(--text-secondary);
+}
+
+.run-detail-value {
+  font-weight: 500;
+}
+
+.run-card-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Shoe card */
+.shoe-card {
+  border-left: 4px solid var(--accent);
+}
+
+.shoe-card.retired {
+  opacity: 0.55;
+  border-left-color: var(--text-secondary);
+}
+
+.shoe-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.shoe-card-actions button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  transition: background 0.2s;
+}
+
+.shoe-card-actions button:active {
+  background: var(--bg);
+}
+
+.shoe-card-actions .retire-btn.is-retired {
+  background: var(--success);
+  color: white;
+  border-color: var(--success);
+}
+
+.shoe-card-actions .delete-btn {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+/* Mileage warnings */
+.mileage-warn-yellow {
+  color: var(--warning-yellow) !important;
+}
+
+.mileage-warn-red {
+  color: var(--warning-red) !important;
+}
+
+.mileage-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+.mileage-badge.yellow {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.mileage-badge.red {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+/* Stats */
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-card-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.stat-card-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+/* Bar chart */
+.bar-chart {
+  margin-top: 16px;
+}
+
+.bar-chart-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.bar-label {
+  width: 90px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+.bar-track {
+  flex: 1;
+  height: 24px;
+  background: var(--bg);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  background: var(--accent);
+  transition: width 0.5s ease;
+  min-width: 2px;
+}
+
+.bar-value {
+  width: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Section headers */
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  margin-top: 24px;
+}
+
+.section-title:first-child {
+  margin-top: 0;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-secondary);
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.empty-state-text {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Settings modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 300;
+  animation: fadeInOverlay 0.2s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  animation: slideUp 0.3s ease;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-actions button {
+  width: 100%;
+}
+
+/* Confirm dialog */
+.confirm-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 400;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.confirm-overlay.active {
+  display: flex;
+}
+
+.confirm-box {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+}
+
+.confirm-text {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.confirm-actions button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.confirm-cancel {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.confirm-ok {
+  background: var(--danger);
+  color: white;
+}
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: calc(var(--tab-height) + 20px);
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--header-bg);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 500;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Per-shoe stats table */
+.shoe-stats-card {
+  margin-bottom: 12px;
+}
+
+.shoe-stats-card .card-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <span class="header-title">ShoeMeHowIFelt</span>
+  <button class="header-action" onclick="openSettings()" aria-label="Settings">&#9881;</button>
+</div>
+
+<!-- Tab Panels -->
+<div class="content">
+  <!-- Runs Tab -->
+  <div id="tab-runs" class="tab-panel active">
+    <button class="btn-primary" onclick="openRunForm()" style="margin-bottom:16px">+ Log a Run</button>
+    <div id="runs-list"></div>
+  </div>
+
+  <!-- Shoes Tab -->
+  <div id="tab-shoes" class="tab-panel">
+    <button class="btn-primary" onclick="openShoeForm()" style="margin-bottom:16px">+ Add Shoe</button>
+    <div id="shoes-list"></div>
+  </div>
+
+  <!-- Stats Tab -->
+  <div id="tab-stats" class="tab-panel">
+    <div id="stats-content"></div>
+  </div>
+</div>
+
+<!-- Tab Bar -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="runs" onclick="switchTab('runs')">
+    <span class="tab-icon">&#127939;</span>
+    <span>Runs</span>
+  </button>
+  <button class="tab-btn" data-tab="shoes" onclick="switchTab('shoes')">
+    <span class="tab-icon">&#128095;</span>
+    <span>Shoes</span>
+  </button>
+  <button class="tab-btn" data-tab="stats" onclick="switchTab('stats')">
+    <span class="tab-icon">&#128202;</span>
+    <span>Stats</span>
+  </button>
+</div>
+
+<!-- Run Form -->
+<div id="run-form-overlay" class="form-overlay">
+  <div class="form-sheet">
+    <div class="form-sheet-header">
+      <span class="form-sheet-title">Log a Run</span>
+      <button class="form-close" onclick="closeRunForm()">&times;</button>
+    </div>
+    <form id="run-form" onsubmit="saveRun(event)">
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" id="run-date" class="form-input" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Distance (mi)</label>
+          <input type="number" id="run-distance" class="form-input" inputmode="decimal" step="0.01" min="0" required placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Duration (min)</label>
+          <input type="number" id="run-duration" class="form-input" inputmode="decimal" step="0.1" min="0" required placeholder="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Temperature (&deg;F, optional)</label>
+        <input type="number" id="run-temp" class="form-input" inputmode="numeric" placeholder="Optional">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Shoe</label>
+        <select id="run-shoe" class="form-input" required>
+          <option value="">Select a shoe</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">How did the shoe feel? (1-10)</label>
+        <div class="feeling-selector" id="feeling-selector"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes (optional)</label>
+        <textarea id="run-notes" class="form-input" rows="2" placeholder="How was the run?"></textarea>
+      </div>
+      <button type="submit" class="btn-primary">Save Run</button>
+    </form>
+  </div>
+</div>
+
+<!-- Shoe Form -->
+<div id="shoe-form-overlay" class="form-overlay">
+  <div class="form-sheet">
+    <div class="form-sheet-header">
+      <span class="form-sheet-title">Add Shoe</span>
+      <button class="form-close" onclick="closeShoeForm()">&times;</button>
+    </div>
+    <form id="shoe-form" onsubmit="saveShoe(event)">
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input type="text" id="shoe-name" class="form-input" required placeholder="e.g. Nike Pegasus 40">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Brand (optional)</label>
+        <input type="text" id="shoe-brand" class="form-input" placeholder="e.g. Nike">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Color (optional)</label>
+        <input type="color" id="shoe-color" class="form-input" value="#00B4D8" style="height:48px;padding:4px 8px;">
+      </div>
+      <button type="submit" class="btn-primary">Save Shoe</button>
+    </form>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settings-overlay" class="modal-overlay">
+  <div class="modal">
+    <div class="form-sheet-header">
+      <span class="modal-title">Settings</span>
+      <button class="form-close" onclick="closeSettings()">&times;</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="exportData()">Export Data (JSON)</button>
+      <button class="btn-secondary" onclick="triggerImport()">Import Data (JSON)</button>
+      <input type="file" id="import-input" accept=".json,application/json" style="display:none" onchange="importData(event)">
+      <button class="btn-danger" onclick="confirmClearAll()" style="margin-top:8px;width:100%">Clear All Data</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Dialog -->
+<div id="confirm-overlay" class="confirm-overlay">
+  <div class="confirm-box">
+    <p class="confirm-text" id="confirm-text"></p>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="confirm-ok" id="confirm-ok">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<script>
+// ==================== Data Layer ====================
+const STORAGE_KEY_SHOES = 'smhif_shoes';
+const STORAGE_KEY_RUNS = 'smhif_runs';
+
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
+}
+
+function getShoes() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY_SHOES)) || [];
+  } catch { return []; }
+}
+
+function saveShoes(shoes) {
+  localStorage.setItem(STORAGE_KEY_SHOES, JSON.stringify(shoes));
+}
+
+function getRuns() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY_RUNS)) || [];
+  } catch { return []; }
+}
+
+function saveRuns(runs) {
+  localStorage.setItem(STORAGE_KEY_RUNS, JSON.stringify(runs));
+}
+
+// ==================== Tab Navigation ====================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+  if (tab === 'runs') renderRuns();
+  if (tab === 'shoes') renderShoes();
+  if (tab === 'stats') renderStats();
+}
+
+// ==================== Feeling Score Helpers ====================
+function getFeelingColor(score) {
+  if (score <= 2) return '#EF4444';
+  if (score <= 4) return '#F97316';
+  if (score <= 6) return '#F59E0B';
+  if (score <= 8) return '#22C55E';
+  return '#10B981';
+}
+
+function createFeelingBadge(score) {
+  return '<span class="feeling-badge" style="background:' + getFeelingColor(score) + '">' + score + '</span>';
+}
+
+// ==================== Run Form ====================
+let selectedFeeling = null;
+
+function buildFeelingSelector() {
+  const container = document.getElementById('feeling-selector');
+  container.innerHTML = '';
+  for (let i = 1; i <= 10; i++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'feeling-btn';
+    btn.dataset.value = i;
+    btn.textContent = i;
+    btn.addEventListener('click', function() {
+      selectedFeeling = i;
+      container.querySelectorAll('.feeling-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+    container.appendChild(btn);
+  }
+}
+
+function populateShoeSelector() {
+  const select = document.getElementById('run-shoe');
+  const shoes = getShoes().filter(s => !s.retired);
+  select.innerHTML = '<option value="">Select a shoe</option>';
+  shoes.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = s.name + (s.brand ? ' (' + s.brand + ')' : '');
+    select.appendChild(opt);
+  });
+}
+
+function openRunForm() {
+  const shoes = getShoes().filter(s => !s.retired);
+  if (shoes.length === 0) {
+    showToast('Add a shoe first!');
+    switchTab('shoes');
+    setTimeout(() => openShoeForm(), 300);
+    return;
+  }
+  document.getElementById('run-form').reset();
+  document.getElementById('run-date').value = new Date().toISOString().split('T')[0];
+  selectedFeeling = null;
+  buildFeelingSelector();
+  populateShoeSelector();
+  document.getElementById('run-form-overlay').classList.add('active');
+}
+
+function closeRunForm() {
+  document.getElementById('run-form-overlay').classList.remove('active');
+}
+
+function saveRun(e) {
+  e.preventDefault();
+  if (!selectedFeeling) {
+    showToast('Please rate how the shoe felt');
+    return;
+  }
+  const run = {
+    id: generateId(),
+    date: document.getElementById('run-date').value,
+    distance: parseFloat(document.getElementById('run-distance').value),
+    duration: parseFloat(document.getElementById('run-duration').value),
+    temperature: document.getElementById('run-temp').value ? parseInt(document.getElementById('run-temp').value) : null,
+    shoeId: document.getElementById('run-shoe').value,
+    shoeFeeling: selectedFeeling,
+    notes: document.getElementById('run-notes').value.trim()
+  };
+  const runs = getRuns();
+  runs.push(run);
+  saveRuns(runs);
+  closeRunForm();
+  renderRuns();
+  showToast('Run logged!');
+}
+
+// ==================== Shoe Form ====================
+function openShoeForm() {
+  document.getElementById('shoe-form').reset();
+  document.getElementById('shoe-color').value = '#00B4D8';
+  document.getElementById('shoe-form-overlay').classList.add('active');
+}
+
+function closeShoeForm() {
+  document.getElementById('shoe-form-overlay').classList.remove('active');
+}
+
+function saveShoe(e) {
+  e.preventDefault();
+  const shoe = {
+    id: generateId(),
+    name: document.getElementById('shoe-name').value.trim(),
+    brand: document.getElementById('shoe-brand').value.trim(),
+    color: document.getElementById('shoe-color').value,
+    dateAdded: new Date().toISOString(),
+    retired: false
+  };
+  const shoes = getShoes();
+  shoes.push(shoe);
+  saveShoes(shoes);
+  closeShoeForm();
+  renderShoes();
+  showToast('Shoe added!');
+}
+
+// ==================== Render Runs ====================
+function renderRuns() {
+  const container = document.getElementById('runs-list');
+  const runs = getRuns().sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+  const shoes = getShoes();
+  const shoeMap = {};
+  shoes.forEach(s => shoeMap[s.id] = s);
+
+  if (runs.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#127939;</div><div class="empty-state-text">No runs yet!<br>Log your first run to get started.</div></div>';
+    return;
+  }
+
+  let html = '';
+  runs.forEach(run => {
+    const shoe = shoeMap[run.shoeId];
+    const shoeName = shoe ? shoe.name : 'Unknown shoe';
+    const dateStr = formatDate(run.date);
+    const pace = run.duration && run.distance ? (run.duration / run.distance).toFixed(2) : null;
+
+    html += '<div class="card run-card" onclick="toggleRunCard(this)">';
+    html += '<div class="run-card-main">';
+    html += '<div class="run-card-info">';
+    html += '<div class="run-card-date">' + dateStr + '</div>';
+    html += '<div class="run-card-meta">' + run.distance + ' mi &middot; ' + run.duration + ' min &middot; ' + shoeName + '</div>';
+    html += '</div>';
+    html += createFeelingBadge(run.shoeFeeling);
+    html += '</div>';
+    html += '<div class="run-card-details">';
+    html += '<div class="run-detail-row"><span class="run-detail-label">Distance</span><span class="run-detail-value">' + run.distance + ' mi</span></div>';
+    html += '<div class="run-detail-row"><span class="run-detail-label">Duration</span><span class="run-detail-value">' + run.duration + ' min</span></div>';
+    if (pace) {
+      html += '<div class="run-detail-row"><span class="run-detail-label">Pace</span><span class="run-detail-value">' + pace + ' min/mi</span></div>';
+    }
+    if (run.temperature !== null && run.temperature !== undefined) {
+      html += '<div class="run-detail-row"><span class="run-detail-label">Temp</span><span class="run-detail-value">' + run.temperature + '&deg;F</span></div>';
+    }
+    html += '<div class="run-detail-row"><span class="run-detail-label">Shoe</span><span class="run-detail-value">' + shoeName + '</span></div>';
+    html += '<div class="run-detail-row"><span class="run-detail-label">Shoe Feeling</span><span class="run-detail-value">' + createFeelingBadge(run.shoeFeeling) + '</span></div>';
+    if (run.notes) {
+      html += '<div class="run-detail-row"><span class="run-detail-label">Notes</span><span class="run-detail-value">' + escapeHtml(run.notes) + '</span></div>';
+    }
+    html += '<div class="run-card-actions"><button class="btn-danger btn-small" onclick="deleteRun(event, \'' + run.id + '\')">Delete</button></div>';
+    html += '</div>';
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function toggleRunCard(el) {
+  el.classList.toggle('expanded');
+}
+
+function deleteRun(e, id) {
+  e.stopPropagation();
+  showConfirm('Delete this run?', function() {
+    const runs = getRuns().filter(r => r.id !== id);
+    saveRuns(runs);
+    renderRuns();
+    showToast('Run deleted');
+  });
+}
+
+// ==================== Render Shoes ====================
+function renderShoes() {
+  const container = document.getElementById('shoes-list');
+  const shoes = getShoes();
+  const runs = getRuns();
+
+  if (shoes.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#128095;</div><div class="empty-state-text">No shoes yet!<br>Add your first pair to get started.</div></div>';
+    return;
+  }
+
+  // Sort: active first, then retired
+  const sorted = shoes.slice().sort((a, b) => {
+    if (a.retired !== b.retired) return a.retired ? 1 : -1;
+    return a.name.localeCompare(b.name);
+  });
+
+  let html = '';
+  sorted.forEach(shoe => {
+    const shoeRuns = runs.filter(r => r.shoeId === shoe.id);
+    const totalMiles = shoeRuns.reduce((sum, r) => sum + r.distance, 0);
+    const avgFeeling = shoeRuns.length ? (shoeRuns.reduce((sum, r) => sum + r.shoeFeeling, 0) / shoeRuns.length).toFixed(1) : '-';
+    const borderColor = shoe.color || 'var(--accent)';
+
+    let mileageBadge = '';
+    if (totalMiles > 500) {
+      mileageBadge = '<span class="mileage-badge red">Replace!</span>';
+    } else if (totalMiles > 300) {
+      mileageBadge = '<span class="mileage-badge yellow">Wearing</span>';
+    }
+
+    html += '<div class="card shoe-card' + (shoe.retired ? ' retired' : '') + '" style="border-left-color:' + borderColor + '">';
+    html += '<div class="card-header">';
+    html += '<div><div class="card-title">' + escapeHtml(shoe.name) + (shoe.retired ? ' <span style="font-size:12px;color:var(--text-secondary)">(Retired)</span>' : '') + '</div>';
+    if (shoe.brand) html += '<div class="card-subtitle">' + escapeHtml(shoe.brand) + '</div>';
+    html += '</div></div>';
+    html += '<div class="card-stats">';
+    html += '<div class="card-stat"><span class="card-stat-value">' + totalMiles.toFixed(1) + mileageBadge + '</span><span class="card-stat-label">Miles</span></div>';
+    html += '<div class="card-stat"><span class="card-stat-value">' + shoeRuns.length + '</span><span class="card-stat-label">Runs</span></div>';
+    html += '<div class="card-stat"><span class="card-stat-value">' + avgFeeling + '</span><span class="card-stat-label">Avg Feel</span></div>';
+    html += '</div>';
+    html += '<div class="shoe-card-actions">';
+    html += '<button class="retire-btn' + (shoe.retired ? ' is-retired' : '') + '" onclick="toggleRetire(\'' + shoe.id + '\')">' + (shoe.retired ? 'Reactivate' : 'Retire') + '</button>';
+    html += '<button class="delete-btn" onclick="deleteShoe(\'' + shoe.id + '\')">Delete</button>';
+    html += '</div>';
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function toggleRetire(id) {
+  const shoes = getShoes();
+  const shoe = shoes.find(s => s.id === id);
+  if (shoe) {
+    shoe.retired = !shoe.retired;
+    saveShoes(shoes);
+    renderShoes();
+    showToast(shoe.retired ? 'Shoe retired' : 'Shoe reactivated');
+  }
+}
+
+function deleteShoe(id) {
+  const runs = getRuns().filter(r => r.shoeId === id);
+  let msg = 'Delete this shoe?';
+  if (runs.length > 0) {
+    msg += ' ' + runs.length + ' run(s) will lose their shoe reference.';
+  }
+  showConfirm(msg, function() {
+    const shoes = getShoes().filter(s => s.id !== id);
+    saveShoes(shoes);
+    renderShoes();
+    showToast('Shoe deleted');
+  });
+}
+
+// ==================== Render Stats ====================
+function renderStats() {
+  const container = document.getElementById('stats-content');
+  const runs = getRuns();
+  const shoes = getShoes();
+
+  if (runs.length === 0 && shoes.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#128202;</div><div class="empty-state-text">No data yet!<br>Log some runs to see your stats.</div></div>';
+    return;
+  }
+
+  const totalRuns = runs.length;
+  const totalMiles = runs.reduce((s, r) => s + r.distance, 0);
+  const totalTime = runs.reduce((s, r) => s + r.duration, 0);
+  const avgDist = totalRuns ? (totalMiles / totalRuns).toFixed(1) : '-';
+  const avgFeeling = totalRuns ? (runs.reduce((s, r) => s + r.shoeFeeling, 0) / totalRuns).toFixed(1) : '-';
+
+  let html = '<div class="section-title">Overall</div>';
+  html += '<div class="stats-summary">';
+  html += '<div class="stat-card"><div class="stat-card-value">' + totalRuns + '</div><div class="stat-card-label">Runs</div></div>';
+  html += '<div class="stat-card"><div class="stat-card-value">' + totalMiles.toFixed(1) + '</div><div class="stat-card-label">Miles</div></div>';
+  html += '<div class="stat-card"><div class="stat-card-value">' + formatDuration(totalTime) + '</div><div class="stat-card-label">Total Time</div></div>';
+  html += '<div class="stat-card"><div class="stat-card-value">' + avgDist + '</div><div class="stat-card-label">Avg Dist</div></div>';
+  html += '<div class="stat-card"><div class="stat-card-value">' + avgFeeling + '</div><div class="stat-card-label">Avg Feeling</div></div>';
+  html += '</div>';
+
+  // Per-shoe breakdown
+  if (shoes.length > 0) {
+    html += '<div class="section-title">Per Shoe</div>';
+    const shoeStats = shoes.map(shoe => {
+      const shoeRuns = runs.filter(r => r.shoeId === shoe.id);
+      const miles = shoeRuns.reduce((s, r) => s + r.distance, 0);
+      const feelings = shoeRuns.map(r => r.shoeFeeling);
+      return {
+        shoe: shoe,
+        runs: shoeRuns.length,
+        miles: miles,
+        avgFeeling: feelings.length ? (feelings.reduce((a, b) => a + b, 0) / feelings.length).toFixed(1) : '-',
+        bestFeeling: feelings.length ? Math.max(...feelings) : '-',
+        worstFeeling: feelings.length ? Math.min(...feelings) : '-'
+      };
+    }).sort((a, b) => b.miles - a.miles);
+
+    shoeStats.forEach(s => {
+      let mileageBadge = '';
+      if (s.miles > 500) mileageBadge = '<span class="mileage-badge red">Replace!</span>';
+      else if (s.miles > 300) mileageBadge = '<span class="mileage-badge yellow">Wearing</span>';
+
+      html += '<div class="card shoe-stats-card" style="border-left:4px solid ' + (s.shoe.color || 'var(--accent)') + (s.shoe.retired ? ';opacity:0.6' : '') + '">';
+      html += '<div class="card-title">' + escapeHtml(s.shoe.name) + (s.shoe.retired ? ' <span style="font-size:12px;color:var(--text-secondary)">(Retired)</span>' : '') + mileageBadge + '</div>';
+      html += '<div class="card-stats">';
+      html += '<div class="card-stat"><span class="card-stat-value">' + s.miles.toFixed(1) + '</span><span class="card-stat-label">Miles</span></div>';
+      html += '<div class="card-stat"><span class="card-stat-value">' + s.runs + '</span><span class="card-stat-label">Runs</span></div>';
+      html += '<div class="card-stat"><span class="card-stat-value">' + s.avgFeeling + '</span><span class="card-stat-label">Avg Feel</span></div>';
+      html += '<div class="card-stat"><span class="card-stat-value">' + s.bestFeeling + '</span><span class="card-stat-label">Best</span></div>';
+      html += '<div class="card-stat"><span class="card-stat-value">' + s.worstFeeling + '</span><span class="card-stat-label">Worst</span></div>';
+      html += '</div></div>';
+    });
+
+    // Bar chart: miles per shoe
+    const maxMiles = Math.max(...shoeStats.map(s => s.miles), 1);
+    html += '<div class="bar-chart">';
+    html += '<div class="bar-chart-title">Miles per Shoe</div>';
+    shoeStats.forEach(s => {
+      const pct = (s.miles / maxMiles * 100).toFixed(1);
+      const barColor = s.shoe.color || 'var(--accent)';
+      let valClass = '';
+      if (s.miles > 500) valClass = ' mileage-warn-red';
+      else if (s.miles > 300) valClass = ' mileage-warn-yellow';
+      html += '<div class="bar-row">';
+      html += '<div class="bar-label">' + escapeHtml(s.shoe.name) + '</div>';
+      html += '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + barColor + '"></div></div>';
+      html += '<div class="bar-value' + valClass + '">' + s.miles.toFixed(1) + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  container.innerHTML = html;
+}
+
+// ==================== Settings ====================
+function openSettings() {
+  document.getElementById('settings-overlay').classList.add('active');
+}
+
+function closeSettings() {
+  document.getElementById('settings-overlay').classList.remove('active');
+}
+
+function exportData() {
+  const data = {
+    shoes: getShoes(),
+    runs: getRuns(),
+    exportedAt: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'shoemehoifelt-backup-' + new Date().toISOString().split('T')[0] + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Data exported!');
+  closeSettings();
+}
+
+function triggerImport() {
+  document.getElementById('import-input').click();
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data.shoes && Array.isArray(data.shoes)) saveShoes(data.shoes);
+      if (data.runs && Array.isArray(data.runs)) saveRuns(data.runs);
+      renderAll();
+      showToast('Data imported!');
+      closeSettings();
+    } catch {
+      showToast('Invalid file format');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function confirmClearAll() {
+  closeSettings();
+  showConfirm('Clear ALL data? This cannot be undone.', function() {
+    localStorage.removeItem(STORAGE_KEY_SHOES);
+    localStorage.removeItem(STORAGE_KEY_RUNS);
+    renderAll();
+    showToast('All data cleared');
+  });
+}
+
+// ==================== Confirm Dialog ====================
+let confirmCallback = null;
+
+function showConfirm(msg, callback) {
+  document.getElementById('confirm-text').textContent = msg;
+  confirmCallback = callback;
+  document.getElementById('confirm-overlay').classList.add('active');
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('active');
+  confirmCallback = null;
+}
+
+document.getElementById('confirm-ok').addEventListener('click', function() {
+  if (confirmCallback) confirmCallback();
+  closeConfirm();
+});
+
+// ==================== Toast ====================
+let toastTimer = null;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('visible');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('visible'), 2200);
+}
+
+// ==================== Utilities ====================
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function formatDuration(mins) {
+  if (mins < 60) return mins.toFixed(0) + 'm';
+  const h = Math.floor(mins / 60);
+  const m = Math.round(mins % 60);
+  return h + 'h ' + m + 'm';
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function renderAll() {
+  renderRuns();
+  renderShoes();
+  renderStats();
+}
+
+// ==================== Overlay close on background tap ====================
+document.getElementById('run-form-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeRunForm();
+});
+document.getElementById('shoe-form-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeShoeForm();
+});
+document.getElementById('settings-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeSettings();
+});
+document.getElementById('confirm-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeConfirm();
+});
+
+// ==================== Init ====================
+renderRuns();
+</script>
+</body>
+</html>
